@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+		th:replace="~{AdminBase::Layout(~{::section})}">
+	<head>
+		
+	</head>
+	<body>
+		<section style="width: 100%;">
+			<div class="container-fluid py-4">
+		      <div class="row">
+		        <div class="col-12">
+		          <div class="card my-4">
+		            <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+		              <div class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3">
+		                <h6 class="text-white text-capitalize ps-3" style="font-size: 2rem;">PRODUCTS</h6>
+		              </div>
+		            </div>
+					<div class="text-center card-body">
+		                <form  action="/admin/product/update" method="post" enctype="multipart/form-data" role="form" class="text-start" style="width: 50%; text-align: center;margin: 0 auto;">
+					      	<input type="hidden" name="productId" th:value="${product.id}">
+
+					      	<div class="input-group input-group-outline mb-3" >
+		                    	<label class="w-30 my-2" style="font-size: 1.2rem;">Tên sản phẩm :</label>
+		                    	<input type="text" name="name" class="form-control" placeholder="nhập tên sản phẩm" th:value="${product.name}">
+		                 	</div>             
+		                 	<div class="input-group input-group-outline mb-3">
+							    <label class="w-30 my-2" style="font-size: 1.2rem;">Chọn ảnh chính mới:</label>
+							    <input id="file-input" type="file" name="mainImage">
+							    <img id="image-container" style="max-width: 100px; max-height: 100px; display: none;">
+							</div>
+							<div class="input-group input-group-outline mb-3" >
+							        <label class="w-30 my-2" style="font-size: 1.2rem;">Ảnh chính cũ :</label>
+							        <img  th:src="@{'/getproductimage/products/' + ${product.mainImage}}" class="avatar avatar-xl me-3 border-radius-lg clickable-image" alt="user1">
+							</div>
+							
+							<div class="input-group input-group-outline mb-3">
+							    <label class="w-30 my-2" style="font-size: 1.2rem;">Chọn ảnh phụ mới:</label>
+							    <input id="additional-images-input" type="file" name="additionalImages" multiple>
+							    
+							    <div id="additional-images-preview" style="display: flex; flex-wrap: wrap;">
+									
+								</div>
+							</div>
+							
+							<div class="input-group input-group-outline mb-3">
+							    <label class="w-30 my-2" style="font-size: 1.2rem;">Ảnh phụ cũ:</label>			    
+							    <div th:each="productImages : ${productImages}" style="display: flex; flex-wrap: wrap;">
+									<img th:src="@{'/getproductimage/products/' + ${productImages.name}}" class="avatar avatar-xl me-3 border-radius-lg clickable-image" alt="Additional Image">
+								</div>
+							</div>
+							
+							
+							
+									                  <!-- Category Select -->
+						<div class="input-group input-group-outline mb-3" style="display: flex; align-items: center;">
+						    <label class="w-30 my-2" style="font-size: 1.2rem;">Chọn danh mục:</label>
+						    <select name="category_id" class="form-select" style="border: 1px solid #ced4da; border-radius: 0.25rem">
+						        <option value="" disabled>Choose one</option>
+						        <!-- Use Thymeleaf to populate category options -->
+						        <option th:each="category : ${categories}" th:value="${category.id}" th:text="${category.name}"></option>
+						    </select>
+						</div>
+						
+						<!-- Brand Select -->
+						<div class="input-group input-group-outline mb-3" style="display: flex; align-items: center;">
+						    <label class="w-30 my-2" style="font-size: 1.2rem;">Chọn thương hiệu:</label>
+						    <select name="brand_id" class="form-select" style="border: 1px solid #ced4da; border-radius: 0.25rem">
+						        <option value="" disabled>Choose one</option>
+						        <!-- Use Thymeleaf to populate brand options -->
+						        <option th:each="brand : ${brands}" th:value="${brand.id}" th:text="${brand.name}"></option>
+						    </select>
+						</div>
+
+
+
+		                  
+		                  <div class="input-group input-group-outline mb-3" >
+		                    <label class="w-30 my-2" style="font-size: 1.2rem;">Giá tiền :</label>
+		                    <input type="number" name="price" class="form-control" placeholder="Nhập giá tiền" th:value="${product.price}">
+		                 </div>
+		                 <div class="input-group input-group-outline mb-3" >
+		                    <label class="w-30 my-2" style="font-size: 1.2rem;">cost :</label>
+		                    <input type="number" name="cost" class="form-control" placeholder="Nhập cost" th:value="${product.cost}">
+		                 </div>
+		                 <div class="input-group input-group-outline mb-3" >
+		                    <label class="w-30 my-2" style="font-size: 1.2rem;">cost :</label>
+		                    <input type="number" name="discountPercent" class="form-control" placeholder="Nhập cost" th:value="${product.discountPercent}">
+		                 </div>
+		                 
+		                 <div class="input-group input-group-outline mb-3" >
+		                    <label class="w-30 my-2" style="font-size: 1.2rem;">biệt danh :</label>
+		                    <input type="text" name="alias" class="form-control" placeholder="Nhập biệt danh" th:value="${product.alias}">
+		                 </div>
+		                 
+		                 
+		                 <div class="input-group input-group-outline mb-3" >
+		                    <label class="w-30 my-2" style="font-size: 1.2rem;">Giới thiệu ngắn gọn :</label>
+		                    <input type="text" name="short_description" class="form-control" placeholder="nhập thông tin" th:value="${product.shortDescription}">
+		                 </div>
+		                 
+		                 
+		                <div class="input-group input-group-outline mb-3" >
+		                    <label class="w-30 my-2" style="font-size: 1.2rem;">Giới thiệu sản phẩm :</label>
+		                    <textarea name="full_description" class="form-control" rows="8" placeholder="Nhập thông tin" th:text="${product.fullDescription}"></textarea>
+		                 </div>
+		                  	               
+		                  <div class="text-center">
+							<a class="btn bg-gradient-primary" href="/admin/product">Trở về danh sách</a>
+		                    <button type="submit" class="btn bg-gradient-primary">Lưu</button>
+		                  </div>
+		                </form>
+		            </div>
+		          </div>
+		        </div>
+		      </div>
+		    </div>		
+		</section>	
+	</body>
+</html>

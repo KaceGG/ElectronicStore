@@ -2,14 +2,14 @@ package javaweb.ElectronicStore.models.order;
 
 public enum OrderStatus {
 
-	NEW {
-
-		@Override
-		public String defaultDescription() {
-			return "Order was placed by the customer";
-		}
-
-	},
+//	NEW {
+//
+//		@Override
+//		public String defaultDescription() {
+//			return "Order was placed by the customer";
+//		}
+//
+//	},
 	CANCELLED {
 
 		@Override
@@ -26,22 +26,22 @@ public enum OrderStatus {
 		}
 
 	},
-	PACKAGED {
-
-		@Override
-		public String defaultDescription() {
-			return "Products were packaged";
-		}
-
-	},
-	PICKED {
-
-		@Override
-		public String defaultDescription() {
-			return "Shipper picked the package";
-		}
-
-	},
+//	PACKAGED {
+//
+//		@Override
+//		public String defaultDescription() {
+//			return "Products were packaged";
+//		}
+//
+//	},
+//	PICKED {
+//
+//		@Override
+//		public String defaultDescription() {
+//			return "Shipper picked the package";
+//		}
+//
+//	},
 	SHIPPING {
 
 		@Override
@@ -57,31 +57,31 @@ public enum OrderStatus {
 			return "Customer received products";
 		}
 
-	},
-	RETURNED {
-
-		@Override
-		public String defaultDescription() {
-			return "Products were returned";
-		}
-
-	},
-	PAID {
-
-		@Override
-		public String defaultDescription() {
-			return "Customer has paid this order";
-		}
-
-	},
-	REFUNDED {
-
-		@Override
-		public String defaultDescription() {
-			return "Customer has been refunded";
-		}
-
 	};
+//	RETURNED {
+//
+//		@Override
+//		public String defaultDescription() {
+//			return "Products were returned";
+//		}
+//
+//	},
+//	PAID {
+//
+//		@Override
+//		public String defaultDescription() {
+//			return "Customer has paid this order";
+//		}
+//
+//	},
+//	REFUNDED {
+//
+//		@Override
+//		public String defaultDescription() {
+//			return "Customer has been refunded";
+//		}
+
+//	};
 
 	public abstract String defaultDescription();
 }

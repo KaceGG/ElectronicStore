@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+		th:replace="~{AdminBase::Layout(~{::section})}">
+	<head>	
+	</head>
+	<body >
+		<section style="width: 100%;">
+			<div class="container-fluid py-4">
+		      <div class="row">
+		        <div class="col-12">
+		          <div class="card my-4">
+		            <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+		              <div class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3">
+		                <h6 class="text-white text-capitalize ps-3" style="font-size: 2rem;">Products table</h6>
+		              </div>
+		            </div>
+		            
+		            
+		            <div th:if="${successMessage}">
+		            	<div id="notification" style="position: fixed; z-index: 1000; top: 20px; right: 20px; background-color: #209cee; border-radius: 10px; color: white; padding: 15px; display: none;">
+				
+						    <script th:inline="javascript">
+						        var successMessage = /*[[${successMessage}]]*/ '';
+						        if (successMessage) {
+						            showSuccessNotification(successMessage);
+						        }
+						    </script>
+						</div>
+					</div>
+					
+		            <div class="card-body px-0 pb-2">
+		              <div class="table-responsive p-0">
+						 <div class="d-flex justify-content-between align-items-center">
+							    <a href="/admin/product/add" class="btn btn-primary my-custom-button">
+							        Add Product
+							    </a>
+							    <form class="d-flex align-items-start" action="/admin/product" method="get">
+							        <input type="text" class="form-control border h-100 mt-1" name="name" id="searchInput" placeholder="Search by name" >
+							        <button type="submit" class="btn btn-primary my-custom-button" style="width: 150px;">Search</button>
+							    </form>
+						</div>
+						<form action="/admin/product" method="get" style="width: 100%;display: flex;">
+						    <div class="input-group input-group-outline mb-3" style="display: flex; align-items: center;">
+			                    <label class="w-30 my-2" style="font-size: 1rem;">Chọn danh mục:</label>
+			                    <select name="category_id" class="form-select" style=" border: 1px solid #ced4da; border-radius: 0.25rem;">
+						            <option value="">Tất cả</option>
+						            <option th:each="category : ${listcategory}" th:value="${category.id}" th:text="${category.name}"></option>
+						        </select>	
+			                  </div>
+			                  
+			                  <div class="input-group input-group-outline mb-3" style="display: flex; align-items: center;">
+			                    <label class="w-30 my-2" style="font-size: 1rem;">Chọn thương hiệu:</label>
+			                    <select name="brand_id" class="form-select" style=" border: 1px solid #ced4da; border-radius: 0.25rem;">
+						            <option value="">Tất cả</option>
+						            <option 
+										th:each="brand : ${listbrand}"
+										th:value="${brand.id}"
+										th:text	="${brand.name}"
+										>
+									</option>
+						        </select>
+			                  </div>	
+						    <button type="submit" class="btn btn-primary" style="width: 300px;margin-left: 10px;">Lọc</button>
+						    <button id="exportButton" class="btn btn-primary" style="width: 300px;margin-left: 10px;" onclick="exportToExcel()">Xuất file Excel</button>
+
+						</form>
+		                <table id="productTable" class="table align-items-center mb-0 ">
+		                  <thead>
+		                    <tr>
+		                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ">image & name</th>
+		                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">alias</th>
+		                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">shortDescription</th>
+		                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">cost</th>
+		                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">price</th>
+		                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">discountPercent</th>
+		                      <th class="text-secondary opacity-7"></th>
+		                    </tr>
+		                  </thead>
+		                  <tbody>
+		                    <tr th:each="product : ${productlist}">
+		                      <td>
+		                        <div class="d-flex px-2 py-1">
+		                          <div>
+		                            <img th:src="@{'/getproductimage/products/' + ${product.mainImage}}" class="avatar avatar-sm me-3 border-radius-lg clickable-image" alt="user1">
+		                          </div>
+		                          <div class="d-flex flex-column justify-content-center">
+		                            <h6 th:text="${product.name}" class="mb-0 text-sm"></h6>
+		                          </div>
+		                        </div>
+		                      </td>
+		                      <td>
+		                        <p th:text="${product.alias}" class="text-xs font-weight-bold mb-0"></p>
+		                      </td>
+		                      <td class="align-middle text-center text-sm">
+		                        <p th:text="${product.shortDescription}" class="text-xs font-weight-bold mb-0" 
+		                        style="width: 200px;overflow: hidden;"></p>
+		                      </td>
+		                      <td class="align-middle text-center">
+		                        <span th:text="${product.cost}" class="text-secondary text-xs font-weight-bold"></span>
+		                      </td>
+		                      <td class="align-middle text-center">
+		                        <span th:text="${product.price}" class="text-secondary text-xs font-weight-bold"></span>
+		                      </td>
+		                      <td class="align-middle text-center">
+		                        <span th:text="${product.discountPercent}" class="text-secondary text-xs font-weight-bold"></span>
+		                      </td>
+		                      <td class="align-middle">
+		                        <a th:href="@{'/admin/product/edit/' + ${product.id}}" class="btn btn-primary " >
+		                          Edit
+		                        </a>
+		                        <a th:href="@{'/admin/product/delete/' + ${product.id}}" class="btn btn-primary ">
+		                          Delete
+		                        </a>
+		                      </td>
+		                    </tr>
+		                  </tbody>
+		                </table>
+		                
+		                <div th:if="${noResultsMessage}">
+						    <div class="text-center text-danger mt-3">
+						        <p th:text="${noResultsMessage}" style="font-size: 2rem; font-weight: 500;"></p>
+						    </div>
+						</div>
+						<div th:unless="${noResultsMessage}">
+						    <div class="text-center mt-4">
+						        <ul class="pagination justify-content-center">
+						            <li th:if="${currentPage > 0}" class="page-item" style="margin: 0 12px;">
+						                <a th:href="@{/admin/product(page=0)}" class="page-link">First</a>
+						            </li>
+						            <li th:if="${currentPage > 0}" class="page-item" style="margin: 0 12px;">
+						                <a th:href="@{/admin/product(page=${currentPage - 1})}" class="page-link">Prev</a>
+						            </li>
+						            <li th:each="i : ${#numbers.sequence(0, totalPages - 1)}" class="page-item" th:classappend="${i == currentPage} ? 'active'" style="margin: 0 12px;">
+						                <a th:href="@{/admin/product(page=${i})}" class="page-link" th:text="${i + 1}"></a>
+						            </li>
+						            <li th:if="${currentPage < totalPages - 1}" class="page-item" style="margin: 0 12px;">
+						                <a th:href="@{/admin/product(page=${currentPage + 1})}" class="page-link">Next</a>
+						            </li>
+						            <li th:if="${currentPage < totalPages - 1}" class="page-item" style="margin: 0 12px;">
+						                <a th:href="@{/admin/product(page=${totalPages - 1})}" class="page-link">Last</a>
+						            </li>
+						        </ul>
+						    </div>
+						</div>
+		                
+		                
+		              </div>
+		            </div>
+		          </div>
+		        </div>
+		      </div>
+		    </div>		
+		</section>	
+	</body>
+</html>

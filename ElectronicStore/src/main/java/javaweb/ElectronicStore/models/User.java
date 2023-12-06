@@ -4,11 +4,13 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
+
 import javaweb.ElectronicStore.models.order.Order;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -23,7 +25,7 @@ import jakarta.persistence.Table;
 public class User {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer id;
+	private Long id;
 
 	@Column(name = "phone_number", nullable = false, length = 15)
 	private String phoneNumber;
@@ -31,7 +33,7 @@ public class User {
 	@Column(nullable = false, length = 64)
 	private String password;
 
-	@Column(nullable = true, unique = true, length = 45)
+	@Column(nullable = false, unique = true, length = 45)
 	private String email;
 
 	@Column(name = "first_name", nullable = true, length = 45)
@@ -39,13 +41,43 @@ public class User {
 
 	@Column(name = "last_name", nullable = true, length = 45)
 	private String lastName;
+	
+	private int sex;
+	
+	private Date birthday;
+	
+	private String picture;
+	
+//	@ManyToMany(fetch = FetchType.EAGER, cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+//	@JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
+//	private Set<Role> roles = new HashSet<Role>();
 
-	@ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
-	@JoinTable(name = "users_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
-	private Set<Role> roles = new HashSet<Role>();
+	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
+	private Set<Role> roles = new HashSet<>();
+//	@ManyToMany(cascade = CascadeType.ALL)
+//	@JoinTable(name = "user_roles", 
+//		joinColumns = @JoinColumn(name = "user_id"),
+//		inverseJoinColumns = @JoinColumn(name = "role_id"))
+//	
+//	private Set<Role> roles = new HashSet<>();
 
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user", orphanRemoval = true)
 	private Set<Review> reviews = new HashSet<Review>();
+	
+	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JoinTable(name = "user_liked_reviews",
+	        joinColumns = @JoinColumn(name = "user_id"),
+	        inverseJoinColumns = @JoinColumn(name = "review_id"))
+	private Set<Review> likedReviews = new HashSet<>();
+
+	public Set<Review> getLikedReviews() {
+	    return likedReviews;
+	}
+
+	public void setLikedReviews(Set<Review> likedReviews) {
+	    this.likedReviews = likedReviews;
+	}
 
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user", orphanRemoval = true)
 	private Set<Order> orders = new HashSet<Order>();
@@ -54,18 +86,75 @@ public class User {
 	private Set<Address> addresses = new HashSet<Address>();
 
 	private boolean enabled;
+	
+	private String verfivationcode;
 
-	@Column(name = "created_time")
-	private Date createdTime;
-
-	public User() {
+	public Set<Address> getAddresses() {
+		return addresses;
 	}
 
-	public Integer getId() {
+	public void setAddresses(Set<Address> addresses) {
+		this.addresses = addresses;
+	}
+
+	public String getVerfivationcode() {
+		return verfivationcode;
+	}
+
+	public void setVerfivationcode(String verfivationcode) {
+		this.verfivationcode = verfivationcode;
+	}
+
+	public Set<Order> getOrders() {
+		return orders;
+	}
+
+	public void setOrders(Set<Order> orders) {
+		this.orders = orders;
+	}
+
+	@Column(name = "created_time")
+	private Date createdTime = new Date();
+
+	public User(Long id, String phoneNumber, String password, String email, String firstName, String lastName,
+			Set<Role> roles, boolean enabled, Date createdTime) {
+		super();
+		this.id = id;
+		this.phoneNumber = phoneNumber;
+		this.password = password;
+		this.email = email;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.roles = roles;
+		this.enabled = enabled;
+		this.createdTime = createdTime;
+	}
+
+	public User() {
+		
+	}
+	
+	public User(String phoneNumber, String password, String email, String firstName, String lastName, int sex,
+			Date birthday, String picture, Set<Role> roles, boolean enabled, Date createdTime) {
+		super();
+		this.phoneNumber = phoneNumber;
+		this.password = password;
+		this.email = email;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.sex = sex;
+		this.birthday = birthday;
+		this.picture = picture;
+		this.roles = roles;
+		this.enabled = enabled;
+		this.createdTime = createdTime;
+	}
+
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(Integer id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
@@ -139,6 +228,30 @@ public class User {
 
 	public void setCreatedTime(Date createdTime) {
 		this.createdTime = createdTime;
+	}
+
+	public int getSex() {
+		return sex;
+	}
+
+	public void setSex(int sex) {
+		this.sex = sex;
+	}
+
+	public Date getBirthday() {
+		return birthday;
+	}
+
+	public void setBirthday(Date birthday) {
+		this.birthday = birthday;
+	}
+
+	public String getPicture() {
+		return picture;
+	}
+
+	public void setPicture(String picture) {
+		this.picture = picture;
 	}
 
 	@Override

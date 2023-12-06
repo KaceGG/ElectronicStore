@@ -1,7 +1,10 @@
 package javaweb.ElectronicStore.models;
 
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -9,6 +12,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
@@ -18,6 +22,7 @@ public class Review {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
+
 
 	@Column(length = 128, nullable = false)
 	private String headline;
@@ -37,6 +42,37 @@ public class Review {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_id")
 	private User user;
+	
+	@Column(nullable = false)
+    private int likeCount;
+	
+	@ManyToMany(mappedBy = "likedReviews", cascade = CascadeType.ALL)
+	private Set<User> likedByUsers = new HashSet<>();
+
+	public Set<User> getLikedByUsers() {
+	    return likedByUsers;
+	}
+
+	public void setLikedByUsers(Set<User> likedByUsers) {
+	    this.likedByUsers = likedByUsers;
+	}
+	
+	
+	public Integer getId() {
+		return id;
+	}
+	
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
+	public int getLikeCount() {
+		return likeCount;
+	}
+
+	public void setLikeCount(int likeCount) {
+		this.likeCount = likeCount;
+	}
 
 	public String getHeadline() {
 		return headline;

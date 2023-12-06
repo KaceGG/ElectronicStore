@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+		th:replace="~{base::Layout(~{::section})}">
+	<head>
+	</head>
+	<body>
+	<section>
+    <div class="container">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-md-3" style="margin-top: 50px;">
+                <div class="sidebar">
+                    
+                    <form action="/shop" method="get" class="mt-4" style="margin-bottom: 40px;">
+                        <div class="input-group">
+                            <input type="text" class="form-control" name="name" placeholder="Tìm kiếm sản phẩm...">
+                            <div class="input-group-append">
+                                <button class="btn btn-primary" type="submit">Tìm kiếm</button>
+                            </div>
+                        </div>
+                    </form>
+                    <form action="/shop" method="get">
+						<h4>Danh mục</h4>
+                        <div th:each="category : ${categories}">
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" name="categoryId" th:value="${category.id}">
+                                <label class="form-check-label" th:text="${category.name}"></label>
+                            </div>
+                        </div>
+                        <h4 style="margin-top: 40px;">Thương hiệu</h4>
+                        <div th:each="brand : ${brands}">
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" name="brandId" th:value="${brand.id}">
+                                <label class="form-check-label" th:text="${brand.name}"></label>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary" style="margin-top: 40px;">Lọc</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Hiển thị sản phẩm -->
+            <div class="col-md-9">
+                <div class="single-product-area">
+                    <div class="row">
+                        <div class="col-md-3 col-sm-6" th:each="product : ${products}">
+                            <div class="single-shop-product">
+								<a th:href="@{'/singleproduct/' + ${product.id}}">
+	                                <div class="product-upper">
+	                                    <img th:src="@{'/assets/img/products/' + ${product.mainImage}}" class="avatar avatar-sm me-3 border-radius-lg" alt="product-image">
+	                                </div>
+	                                <h2><p th:text="${product.name}"></p></h2>
+	                                <div class="product-carousel-price">
+	                                    <ins><span th:text="${product.price}"></span> đ</ins>
+	                                </div>
+                                </a>
+                                <div class="product-option-shop">
+                                    <form th:action="@{/user/cart}" method="post">
+                                        <input type="hidden" name="productId" th:value="${product.id}" />
+                                        <input type="hidden" name="quantity" th:value="1" />
+                                        <button type="submit" class="add_to_cart_button">Add to Cart</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Phân trang -->
+                <div th:if="${noResultsMessage}">
+						    <div class="text-center text-danger mt-3">
+						        <p th:text="${noResultsMessage}" style="font-size: 2rem; font-weight: 500;"></p>
+						    </div>
+						</div>
+						<div th:unless="${noResultsMessage}">
+						    <div class="text-center mt-4">
+						        <ul class="pagination justify-content-center">
+						            <li th:if="${currentPage > 0}" class="page-item" style="margin: 0 12px;">
+						                <a th:href="@{/shop(page=0)}" class="page-link">First</a>
+						            </li>
+						            <li th:if="${currentPage > 0}" class="page-item" style="margin: 0 12px;">
+						                <a th:href="@{/shop(page=${currentPage - 1})}" class="page-link">Prev</a>
+						            </li>
+						            <li th:each="i : ${#numbers.sequence(0, totalPages - 1)}" class="page-item" th:classappend="${i == currentPage} ? 'active'" style="margin: 0 12px;">
+						                <a th:href="@{/shop(page=${i})}" class="page-link" th:text="${i + 1}"></a>
+						            </li>
+						            <li th:if="${currentPage < totalPages - 1}" class="page-item" style="margin: 0 12px;">
+						                <a th:href="@{/shop(page=${currentPage + 1})}" class="page-link">Next</a>
+						            </li>
+						            <li th:if="${currentPage < totalPages - 1}" class="page-item" style="margin: 0 12px;">
+						                <a th:href="@{/shop(page=${totalPages - 1})}" class="page-link">Last</a>
+						            </li>
+						        </ul>
+						    </div>
+						</div>
+		            </div>
+		        </div>
+		    </div>
+		</section>
+		
+    			<div th:if="${noResultsMessage}">
+						    <div class="text-center text-danger mt-3">
+						        <p th:text="${noResultsMessage}" style="font-size: 2rem; font-weight: 500;"></p>
+						    </div>
+						</div>
+						<div th:unless="${noResultsMessage}">
+						    <div class="text-center mt-4">
+						        <ul class="pagination justify-content-center">
+						            <li th:if="${currentPage > 0}" class="page-item" style="margin: 0 12px;">
+						                <a th:href="@{/shop(page=0)}" class="page-link">First</a>
+						            </li>
+						            <li th:if="${currentPage > 0}" class="page-item" style="margin: 0 12px;">
+						                <a th:href="@{/shop(page=${currentPage - 1})}" class="page-link">Prev</a>
+						            </li>
+						            <li th:each="i : ${#numbers.sequence(0, totalPages - 1)}" class="page-item" th:classappend="${i == currentPage} ? 'active'" style="margin: 0 12px;">
+						                <a th:href="@{/shop(page=${i})}" class="page-link" th:text="${i + 1}"></a>
+						            </li>
+						            <li th:if="${currentPage < totalPages - 1}" class="page-item" style="margin: 0 12px;">
+						                <a th:href="@{/shop(page=${currentPage + 1})}" class="page-link">Next</a>
+						            </li>
+						            <li th:if="${currentPage < totalPages - 1}" class="page-item" style="margin: 0 12px;">
+						                <a th:href="@{/shop(page=${totalPages - 1})}" class="page-link">Last</a>
+						            </li>
+						        </ul>
+						    </div>
+				</div>
+	</body>
+</html>

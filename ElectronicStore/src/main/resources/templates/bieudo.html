@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en"  xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Home</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+</head>
+<style>
+</style>
+<body>
+<nav class="navbar navbar-dark bg-dark navbar-expand-sm">
+    <a class="navbar-brand  " href="#"><strong> Spring Mvc Charts</strong> </a>
+</nav>
+<br>
+<br>
+<br>
+<div align="center">
+    <a th:href="@{/displayBarGraph}">
+        <img src="https://img.icons8.com/external-icongeek26-outline-colour-icongeek26/50/000000/external-bar-graph-data-analytics-icongeek26-outline-colour-icongeek26.png"/>
+          <strong>Bar Charts</strong></a><br/>
+    <br/>
+    <a th:href="@{/displayPieGraph}">
+        <img src="https://img.icons8.com/external-vitaliy-gorbachev-flat-vitaly-gorbachev/50/000000/external-document-business-vitaliy-gorbachev-flat-vitaly-gorbachev-3.png"/>
+        <strong>Pie Charts</strong></a><br/>
+    <br/>
+    <a th:href="@{/displayLineGraph}">
+        <img src="https://img.icons8.com/external-vitaliy-gorbachev-blue-vitaly-gorbachev/50/000000/external-line-graph-infographic-elements-vitaliy-gorbachev-blue-vitaly-gorbachev.png"/>
+          <strong>Line Charts</strong></a>
+</div>
+</body>
+</html>

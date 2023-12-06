@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+		th:fragment="Layout(content)">
+	<head>
+  		<meta charset="utf-8" />
+		  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+		  <link rel="apple-touch-icon" sizes="76x76" href="../assets/img/apple-icon.png">
+		  <link rel="icon" type="image/png" href="../assets/img/favicon.png">
+		  <title>
+		    admin
+		  </title>
+		  <!--     Fonts and icons     -->
+		  <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,900|Roboto+Slab:400,700" />
+		  <!-- Nucleo Icons -->
+		  <link href="../assets/css/nucleo-icons.css" rel="stylesheet" />
+		  <link href="../assets/css/nucleo-svg.css" rel="stylesheet" />
+		  <!-- Font Awesome Icons -->
+		  <script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script>
+		  <!-- Material Icons -->
+		  <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+		  <!-- CSS Files -->
+		  <link id="pagestyle" th:href="@{/assets/css/material-dashboard.css?v=3.1.0}" rel="stylesheet" />
+		  
+		  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+		  
+		  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.0/xlsx.full.min.js"></script>
+		  
+		  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+		  
+		  <style>
+			  /* CSS for full-screen image display */
+			  .fullscreen-image-container {
+			    position: fixed;
+			    top: 0;
+			    left: 0;
+			    width: 100%;
+			    height: 100%;
+			    background: rgba(0, 0, 0, 0.8);
+			    display: flex;
+			    align-items: center;
+			    justify-content: center;
+			    z-index: 10000;
+			  }
+			
+			  .fullscreen-image {
+			    max-width: 90%;
+			    max-height: 90%;
+			  }
+			</style>
+		 
+		</head>
+		
+	<body style="display: flex;">
+		
+		
+		<!-- MUỐN PHÓNG TO ẢNH NÀO CHỈ CẦN THÊM VÀO CLASS clickable-image -->
+		
+		<script>
+			
+		    document.addEventListener("DOMContentLoaded", function () {
+		      const images = document.querySelectorAll(".clickable-image");
+		
+		      images.forEach(function (image) {
+		        image.addEventListener("click", function () {
+		
+		          // Create a full-screen container for the clicked image
+		          const fullscreenContainer = document.createElement("div");
+		          fullscreenContainer.classList.add("fullscreen-image-container");
+		
+		          // Create an image element for the full-screen view
+		          const fullscreenImage = document.createElement("img");
+		          fullscreenImage.classList.add("fullscreen-image");
+		          fullscreenImage.src = image.src;
+		
+		          // Append the full-screen image to the container
+		          fullscreenContainer.appendChild(fullscreenImage);
+		
+		          // Append the container to the body
+		          document.body.appendChild(fullscreenContainer);
+		
+		          // Add an event listener to close the full-screen view when clicking on it
+		          fullscreenContainer.addEventListener("click", function () {
+		            if (event.target === fullscreenContainer) {
+			              fullscreenContainer.remove();
+			           }
+		          });
+		        });
+		      });
+		    });
+		 </script>
+				
+		<script>
+			  function showSuccessNotification(message) {
+			    const notification = document.getElementById("notification");
+			    notification.textContent = message;
+			    notification.style.display = "block";
+				
+			    setTimeout(() => {
+			      notification.style.display = "none";
+			    }, 5000);
+			  }
+			  
+		</script>
+		
+		
+		
+		<script>
+		    document.addEventListener("DOMContentLoaded", function () {
+		        document.getElementById('file-input').addEventListener('change', function () {
+		            const mainImagePreview = document.getElementById('image-container');
+		            const mainImageInput = document.getElementById('file-input');
+		            
+		            if (mainImageInput.files && mainImageInput.files[0]) {
+		                const reader = new FileReader();
+		                reader.onload = function (e) {
+		                    mainImagePreview.src = e.target.result;
+		                    mainImagePreview.style.display = 'block';
+		                };
+		                reader.readAsDataURL(mainImageInput.files[0]);
+		            }
+		        });
+		        
+		        document.getElementById('additional-images-input').addEventListener('change', function () {
+		            const additionalImagesPreview = document.getElementById('additional-images-preview');
+		            const additionalImagesInput = document.getElementById('additional-images-input');
+		            
+		            for (let i = 0; i < additionalImagesInput.files.length; i++) {
+		                const reader = new FileReader();
+		                const img = document.createElement('img');
+		                img.style.maxWidth = '100px';
+		                img.style.maxHeight = '100px';
+		                reader.onload = function (e) {
+		                    img.src = e.target.result;
+		                };
+		                reader.readAsDataURL(additionalImagesInput.files[i]);
+		                additionalImagesPreview.appendChild(img);
+		            }
+		        });
+		    });
+</script>
+
+
+<script type="text/javascript">
+	  function exportToExcel() {
+	  const originalTable = document.getElementById('productTable');
+	  const clonedTable = originalTable.cloneNode(true);
+	  
+	  // Lấy tất cả các hàng trong bảng (trừ hàng đầu tiên với tiêu đề)
+	  const rows = clonedTable.querySelectorAll('tbody tr');
+	  
+	  // Thêm cột "STT" vào tiêu đề
+	  const headerRow = clonedTable.querySelector('thead tr');
+	  const sttHeader = document.createElement('th');
+	  sttHeader.textContent = 'STT';
+	  headerRow.insertBefore(sttHeader, headerRow.querySelector('th:nth-child(1)'));
+	  
+	  // Điền giá trị STT tự tăng vào các hàng dữ liệu
+	  rows.forEach((row, index) => {
+	    const sttCell = document.createElement('td');
+	    sttCell.textContent = index + 1;
+	    row.insertBefore(sttCell, row.querySelector('td:nth-child(1)'));
+	  });
+	
+	  // Xóa cột "Delete" và "Edit"
+	  clonedTable.querySelectorAll('td:last-child').forEach((cell) => {
+	    cell.remove();
+	  });
+	
+	  // Đổi tên cột "Image & Name" thành "Name"
+	  headerRow.querySelector('th:nth-child(2)').textContent = 'Name';
+	
+	  const ws = XLSX.utils.table_to_sheet(clonedTable);
+	  const wb = XLSX.utils.book_new();
+	  XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+	  XLSX.writeFile(wb, 'products.xlsx'); // Tên tệp Excel đầu ra
+	}
+</script>
+
+
+		
+		
+		<script th:inline="javascript">
+        document.addEventListener("DOMContentLoaded" ,function(){
+			
+	        var monthlyProfits = /*[[${monthlyProfits}]]*/ []; // Dữ liệu tổng doanh thu theo tháng từ controller
+	
+			console.log(monthlyProfits);
+	        var ctx = document.getElementById('myChart').getContext('2d');
+	        var myChart = new Chart(ctx, {
+	            type: 'bar',
+	            data: {
+	                labels: ['Tháng 1', 'Tháng 2', 'Tháng 3', 'Tháng 4', 'Tháng 5', 'Tháng 6', 'Tháng 7', 'Tháng 8', 'Tháng 9', 'Tháng 10', 'Tháng 11', 'Tháng 12'],
+	                datasets: [{
+	                    label: 'Doanh thu theo tháng',
+	                    data: monthlyProfits,
+	                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
+	                    borderColor: 'rgba(54, 162, 235, 1)',
+	                    borderWidth: 1
+	                }]
+	            },
+	            options: {
+	                scales: {
+	                    y: {
+	                        beginAtZero: true
+	                    }
+	                }
+	            }
+	        });
+		})
+    </script>
+		
+		
+		
+		
+	
+		<aside style="position: relative;" class="sidenav navbar navbar-vertical navbar-expand-xs border-0 border-radius-xl my-3 fixed-start ms-3   bg-gradient-dark" id="sidenav-main">
+		    <div class="sidenav-header">
+		      <i class="fas fa-times p-3 cursor-pointer text-white opacity-5 position-absolute end-0 top-0 d-none d-xl-none" aria-hidden="true" id="iconSidenav"></i>
+		      <a class="navbar-brand m-0" href="/admin">
+		        <span class="ms-1 font-weight-bold text-white">ADMIN</span>
+		      </a>
+		    </div>
+		    <hr class="horizontal light mt-0 mb-2">
+		    <div class="collapse navbar-collapse  w-auto " id="sidenav-collapse-main">
+		      <ul class="navbar-nav">
+		        <li class="nav-item">
+		          <a  class="nav-link text-white" href="/admin">
+		            <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+		              <i class="material-icons opacity-10">dashboard</i>
+		            </div>
+		            <span class="nav-link-text ms-1">Dashboard</span>
+		          </a>
+		        </li>
+		        <li class="nav-item">
+		          <a class="nav-link text-white " href="/admin/category">
+		            <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+		              <i class="material-icons opacity-10">table_view</i>
+		            </div>
+		            <span class="nav-link-text ms-1">category</span>
+		          </a>
+		        </li>
+		        <li class="nav-item">
+		          <a class="nav-link text-white " href="/admin/brand">
+		            <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+		              <i class="material-icons opacity-10">table_view</i>
+		            </div>
+		            <span class="nav-link-text ms-1">brand</span>
+		          </a>
+		        </li>
+		        <li class="nav-item">
+		          <a class="nav-link text-white " href="/admin/product">
+		            <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+		              <i class="material-icons opacity-10">table_view</i>
+		            </div>
+		            <span class="nav-link-text ms-1">Product</span>
+		          </a>
+		        </li>
+		        <li class="nav-item">
+		          <a class="nav-link text-white " href="/admin/profileUser">
+		            <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+		              <i class="material-icons opacity-10">person</i>
+		            </div>
+		            <span class="nav-link-text ms-1">Profile</span>
+		          </a>
+		        </li>
+		        <li class="nav-item">
+		          <a class="nav-link text-white " href="/admin/profit">
+		            <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+		              <i class="material-icons opacity-10">receipt_long</i>
+		            </div>
+		            <span class="nav-link-text ms-1">Profit</span>
+		          </a>
+		        </li>
+		        <li class="nav-item">
+		          <a class="nav-link text-white " href="/admin/order">
+		            <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+		              <i class="material-icons opacity-10">notifications</i>
+		            </div>
+		            <span class="nav-link-text ms-1">order</span>
+		          </a>
+		        </li>
+		        <li class="nav-item mt-3">
+		          <h6 class="ps-4 ms-2 text-uppercase text-xs text-white font-weight-bolder opacity-8">Account pages</h6>
+		        </li>
+		        <li class="nav-item">
+		          <a class="nav-link text-white " href="/logout">
+		            <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+		              <i class="material-icons opacity-10">logout</i>
+		            </div>
+		            <span class="nav-link-text ms-1">logout</span>
+		          </a>
+		        </li>
+		      </ul>
+		    </div>
+		    
+		  </aside>  
+		  
+		<div th:replace="${content}"></div>
+	</body>
+	
+	
+<script>
+	const nav_link = document.querySelectorAll(".nav-link");
+	
+	nav_link.forEach(nav => {
+		if (nav.href === ("http://localhost:8070" + window.location.pathname)) {
+			nav.classList.add("active", "bg-gradient-primary");
+		}
+	})
+</script>
+</html>

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Trang Thanh Toán</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+<body> 
+    <section style="text-align: center; width: 70%; margin: 50px auto;">
+        <div th:if="${status == 1}">
+			<h1>Thanh toán thành công!</h1><br>
+			<div>Số tiền giao dịch: <b style="color: green;">[[${amount}]] VNĐ</b></div><br>
+        	<div>Thông tin giao dịch: <b>[[${order_info}]]</b></div><br>
+			<a th:href="@{/user/order}">
+				<button style="cursor: pointer; padding: 10px 20px; border-radius: 4px; border: none; background-color: blue; color: #fff;">
+					Xem đơn hàng
+				</button>
+			</a>
+		</div> 
+		<div th:if="${status == 0}">
+			<h1>Giao dịch thất bại! Vui lòng đặt hàng lại.</h1>
+			<a th:href="@{/user/cart}">
+				<button style="cursor: pointer; padding: 10px 20px; border-radius: 4px; border: none; background-color: blue; color: #fff;">
+					Trở lại
+				</button>
+			</a>
+		</div>
+    </section>
+</body>
+</html>

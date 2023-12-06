@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+		th:replace="~{AdminBase::Layout(~{::section})}">
+	<head>	
+	</head>
+	<body >
+		<section style="width: 100%;">
+			<div class="container-fluid py-4">
+		      <div class="row">
+		        <div class="col-12">
+		          <div class="card my-4">
+		            <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+		              <div class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3">
+		                <h6 class="text-white text-capitalize ps-3" style="font-size: 2rem;">BRAND</h6>
+		              </div>
+		            </div>
+		            
+		            <div th:if="${successMessage}">
+		            	<div id="notification" style="position: fixed; z-index: 1000; top: 20px; right: 20px; background-color: #209cee; border-radius: 10px; color: white; padding: 15px; display: none;">
+				
+						    <script th:inline="javascript">
+						        var successMessage = /*[[${successMessage}]]*/ '';
+						        if (successMessage) {
+						            showSuccessNotification(successMessage);
+						        }
+						    </script>
+						</div>
+					</div>
+		            
+		            <div class="card-body px-0 pb-2">
+		              <div class="table-responsive p-0">	
+						  <div class="d-flex justify-content-between align-items-center">
+							    <a href="/admin/brand/add" class="btn btn-primary my-custom-button">
+							        Add Category
+							    </a>
+							    <form class="d-flex align-items-start" action="/admin/brand" method="get">
+							        <input type="text" class="form-control border h-100 mt-1" name="name" id="searchInput" placeholder="Search by name" >
+							        <button type="submit" class="btn btn-primary my-custom-button" style="width: 150px;">Search</button>
+							    </form>
+							</div>
+		                <table class="table align-items-center mb-0">
+		                  <thead>
+		                    <tr>
+		                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ">logo </th>
+		                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">name</th>
+		                      <th class="text-secondary opacity-7"></th>
+		                    </tr>
+		                  </thead>
+		                  <tbody>
+		                    <tr th:each="brand : ${brandlist}">
+		                      <td>
+		                        <div class="d-flex px-2 py-1">
+		                          <div>
+										<img th:src="@{'/getbrandimage/brand/' + ${brand.logo}}"   class="avatar avatar-xl me-3 border-radius-lg clickable-image" alt="user1">
+		                          </div>
+		                        </div>	
+		                      </td>
+		                      <td>
+		                        <p class="text-xs font-weight-bold mb-0" th:text="${brand.name}"></p>
+		                      </td>
+		                      
+		                      <td class="align-middle">
+		                        <a th:href="@{'/admin/brand/edit/' + ${brand.id}}" class="btn btn-primary" >
+		                          Edit
+		                        </a>
+		                        <a th:href="@{'/admin/brand/delete/' + ${brand.id}}" class="btn btn-primary ">
+		                          Delete
+		                        </a>
+		                      </td>
+		                    </tr>
+		                  </tbody>
+		                </table>
+		      			<div th:if="${noResultsMessage}">
+						    <div class="text-center text-danger mt-3">
+						        <p th:text="${noResultsMessage}" style="font-size: 2rem; font-weight: 500;"></p>
+						    </div>
+						</div>
+						<div th:unless="${noResultsMessage}">
+						    <div class="text-center mt-4">
+						        <ul class="pagination justify-content-center">
+						            <li th:if="${currentPage > 0}" class="page-item" style="margin: 0 12px;">
+						                <a th:href="@{/admin/brand(page=0)}" class="page-link">First</a>
+						            </li>
+						            <li th:if="${currentPage > 0}" class="page-item" style="margin: 0 12px;">
+						                <a th:href="@{/admin/brand(page=${currentPage - 1})}" class="page-link">Prev</a>
+						            </li>
+						            <li th:each="i : ${#numbers.sequence(0, totalPages - 1)}" class="page-item" th:classappend="${i == currentPage} ? 'active'" style="margin: 0 12px;">
+						                <a th:href="@{/admin/brand(page=${i})}" class="page-link" th:text="${i + 1}"></a>
+						            </li>
+						            <li th:if="${currentPage < totalPages - 1}" class="page-item" style="margin: 0 12px;">
+						                <a th:href="@{/admin/brand(page=${currentPage + 1})}" class="page-link">Next</a>
+						            </li>
+						            <li th:if="${currentPage < totalPages - 1}" class="page-item" style="margin: 0 12px;">
+						                <a th:href="@{/admin/brand(page=${totalPages - 1})}" class="page-link">Last</a>
+						            </li>
+						        </ul>
+						    </div>
+						</div>
+		              </div>
+		            </div>
+		          </div>
+		        </div>
+		      </div>
+		    </div>		
+		</section>
+	</body>
+	
+</html>

@@ -13,7 +13,7 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
 
-@Entity
+@Entity	
 @Table(name = "categories")
 public class Category {
 	@Id
@@ -24,6 +24,7 @@ public class Category {
 	private String name;
 
 	@Column(length = 64, nullable = false, unique = true)
+
 	private String alias;
 
 	@Column(length = 128, nullable = false)
@@ -41,10 +42,12 @@ public class Category {
 		this.id = id;
 	}
 
-	public Category(Integer id, String name, String alias) {
+	public Category(Integer id, String name, String alias , String image,boolean enabled) {
 		this.id = id;
 		this.name = name;
 		this.alias = alias;
+		this.image = image;
+		this.enabled = enabled;
 	}
 
 	public static Category copyIdAndName(Category category) {

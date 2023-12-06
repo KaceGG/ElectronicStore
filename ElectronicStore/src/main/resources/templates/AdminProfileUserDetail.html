@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+        th:replace="~{AdminBase::Layout(~{::section})}">
+<head>
+ 
+</head>
+<body>
+<section style="flex: 1;">
+    <h1 class="mt-4 text-center">Chi tiết người dùng</h1>
+    
+    <!-- Thông tin người dùng -->
+    <div class="container mt-4">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <p><strong>Họ:</strong> <span th:text="${user.firstName}"></span></p>
+                <p><strong>Tên:</strong> <span th:text="${user.lastName}"></span></p>
+                <p><strong>Số điện thoại:</strong> <span th:text="${user.phoneNumber}"></span></p>
+                <p><strong>Email:</strong> <span th:text="${user.email}"></span></p>
+                <p><strong>Role:</strong> <span>[[${user.roles}]]</span></p>
+                <p><strong>Tài khoản đang hoạt động:</strong> <span th:text="${user.enabled ? 'Có' : 'Không'}"></span></p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="container mt-4 text-center">
+        <form action="/admin/profileUser/detail/disabled" method="post" th:if="${user.enabled}">
+            <input type="hidden" name="userId" th:value="${user.id}" />
+            <button type="submit" class="btn btn-danger">Vô hiệu hóa tài khoản</button>
+        </form>
+        <form action="/admin/profileUser/detail/active" method="post" th:if="${!user.enabled}">
+            <input type="hidden" name="userId" th:value="${user.id}" />
+            <button type="submit" class="btn btn-success">Kích hoạt tài khoản</button>
+        </form>
+    </div>
+</section>
+</body>
+</html>

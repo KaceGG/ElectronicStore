@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+    th:replace="~{AdminBase::Layout(~{::section})}">
+<head>
+</head>
+<body>
+    <section style="width: 100%;">
+        <div class="container-fluid py-4">
+            <div class="row">
+                <div class="col-12">
+                    <div class="card my-4">
+                        <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+                            <div class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3">
+                                <h6 class="text-white text-capitalize ps-3" style="font-size: 2rem;">EDIT CATEGORY</h6>
+                            </div>
+                        </div>
+                        <div class="text-center card-body" style="width: 50%;text-align: center;margin: 0 auto;">
+                            <form action="/admin/category/update" method="post" enctype="multipart/form-data">
+							    <input type="hidden" name="categoryId" th:value="${category.id}">
+							    <div class="input-group input-group-outline my-3" style="display: flex; align-items: center;">
+							        <label class="w-30 my-2" style="font-size: 1.2rem;">Chọn Ảnh Mới :</label>
+							        <input id="file-input" type="file" name="image">
+									<div id="image-container" style="margin: 0 auto;"></div>
+							    </div>
+							     <div class="input-group input-group-outline mb-3" >
+							        <label class="w-30 my-2" style="font-size: 1.2rem;">Ảnh cũ :</label>
+							        <img  th:src="@{'/assets/img/category/' + ${category.image}}" class="avatar avatar-xl me-3 border-radius-lg clickable-image" alt="user1">
+							    </div>
+							    <div class="input-group input-group-outline mb-3" >
+							        <label class="w-30 my-2" style="font-size: 1.2rem;">Tên Thể Loại :</label>
+							        <input type="text" name="name" class="form-control" placeholder="nhập tên thể loại" th:value="${category.name}">
+							    </div>
+							    <div class="input-group input-group-outline mb-3">
+							        <label class="w-30 my-2" style="font-size: 1.2rem;">Biệt Danh :</label>
+							        <input type="text" name="alias" class="form-control" placeholder="nhập biệt danh thể loại" th:value="${category.alias}">
+							    </div>
+							    <div class="text-center">
+							        <a class="btn bg-gradient-primary" href="/admin/category">Trở về danh sách</a>
+							        <button type="submit" class="btn bg-gradient-primary">Lưu</button>
+							    </div>
+							</form>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</body>
+</html>

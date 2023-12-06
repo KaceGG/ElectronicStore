@@ -1,0 +1,46 @@
+server:
+  port: 8070
+spring:
+  datasource:
+    password: 272002
+    url: jdbc:mysql://localhost:3306/electronic_store?createDatabaseIfNotExist=true
+    username: root
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+    show-sql: false
+  mail:
+    host: smtp.gmail.com
+    password: wthgsmipsxsssccq
+    port: 587
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+    username: kichhoattktest@gmail.com
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: 568179722300-v4r6kgvioqt12l1crims3khitpag3a2e.apps.googleusercontent.com
+            client-secret: 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
+            scope: 
+            - email
+            - profile
+          facebook:
+            client-id: 3015036515294158
+            client-secret: 10120e50aa8784c56d5b675616dc90b5
+            scope: 
+            - email
+            - public_profile
+
+javaweb:
+  app:
+    jwtSecret: =======================BezKoder=Spring===========================
+    jwtExpirationMs: 86400000

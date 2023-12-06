@@ -1,9 +1,7 @@
 package javaweb.ElectronicStore.models.order;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import javaweb.ElectronicStore.models.User;
@@ -29,6 +27,7 @@ public class Order {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 
+	
 	private Date orderTime;
 	private float shippingCost;
 	private float tax;

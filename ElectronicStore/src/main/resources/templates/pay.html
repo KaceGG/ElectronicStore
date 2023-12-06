@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Trang Thanh Toán</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"></script>
+    <script>
+		document.addEventListener("DOMContentLoaded" , function(){
+			var citis = document.getElementById("city");
+			var districts = document.getElementById("district");
+			var wards = document.getElementById("ward");
+			var Parameter = {
+			  url: "https://raw.githubusercontent.com/kenzouno1/DiaGioiHanhChinhVN/master/data.json", 
+			  method: "GET", 
+			  responseType: "application/json", 
+			};
+			var promise = axios(Parameter);
+			promise.then(function (result) {
+			  renderCity(result.data);
+			});
+			
+			function renderCity(data) {
+			  for (const x of data) {
+				var opt = document.createElement('option');
+				 opt.value = x.Name;
+				 opt.text = x.Name;
+				 opt.setAttribute('data-id', x.Id);
+				 citis.options.add(opt);
+			  }
+			  citis.onchange = function () {
+			    district.length = 1;
+			    ward.length = 1;
+			    if(this.options[this.selectedIndex].dataset.id != ""){
+			      const result = data.filter(n => n.Id === this.options[this.selectedIndex].dataset.id);
+			
+			      for (const k of result[0].Districts) {
+					var opt = document.createElement('option');
+					 opt.value = k.Name;
+					 opt.text = k.Name;
+					 opt.setAttribute('data-id', k.Id);
+					 district.options.add(opt);
+			      }
+			    }
+			  };
+			  district.onchange = function () {
+			    ward.length = 1;
+			    const dataCity = data.filter((n) => n.Id === citis.options[citis.selectedIndex].dataset.id);
+			    if (this.options[this.selectedIndex].dataset.id != "") {
+			      const dataWards = dataCity[0].Districts.filter(n => n.Id === this.options[this.selectedIndex].dataset.id)[0].Wards;
+			
+			      for (const w of dataWards) {
+					var opt = document.createElement('option');
+					 opt.value = w.Name;
+					 opt.text = w.Name;
+					 opt.setAttribute('data-id', w.Id);
+					 wards.options.add(opt);
+			      }
+			    }
+			  };
+			}
+			});
+	</script>
+</head>
+<body> 
+    <section style="width: 70%; margin: 50px auto;">
+        <div class="card">
+            <div class="card-top border-bottom text-center bg-light" style="display: flex; align-items: center;">
+                <a href="/user/cart" class="text-dark" style="display: block; font-size: 18px; margin: 20px 0;">Quay lại giỏ hàng</a>
+                <h2 style="text-align: center; flex: 1;">Thông Tin Thanh Toán</h2>
+            </div>
+            <div class="card-body">
+				<form th:action="@{/user/order}" method="post" style="display: flex;">
+                     <div class="col-md-7 left border p-3">
+	                            <div class="form-group">
+	                                <label for="paymentType">Phương thức thanh toán:</label>
+									<select class="form-control" id="paymentType" name="paymentType">
+									    <option th:each="method : ${paymentType}"
+									            th:value="${method.name()}" th:text="${method}"></option>
+									</select>
+	                            </div>
+	                            <div>
+	                                <div class="form-group">
+	                                    <label for="cardHolder">Tên khách hàng:</label>
+	                                    <input type="hidden" name="userId" th:value="${user.id}">
+	                                    <input type="text" class="form-control" id="name" th:value="${user.firstName + user.lastName}" required>
+	                                </div>
+	                                <!-- Địa chỉ nhận hàng -->
+									<div class="form-group">
+									    <label for="province">Tỉnh/Thành phố:</label>
+									    <select class="form-control" id="city" name="city">
+									        <option value="" selected>Chọn tỉnh thành</option>  
+									    </select>
+									</div>
+									
+									<div class="form-group">
+									    <label for="district">Quận/Huyện:</label>
+									    <select class="form-control" id="district" name="district">
+									        <option value="" selected>Chọn quận huyện</option>
+									    </select>
+									</div>
+									
+									<div class="form-group">
+									    <label for="ward">Phường/Xã:</label>
+									    <select class="form-control" id="ward" name="ward">
+									        <option value="" selected>Chọn phường xã</option>
+									    </select>
+									</div>
+									<div class="form-group">
+									    <label for="street">Địa chỉ chi tiết:</label>
+									    <input type="text" class="form-control" id="street" name="street" placeholder="Nhập tên đường" required>
+									</div>
+	                                <div class="form-row">
+	                                    <div class="col">
+	                                        <label for="expiryDate">Số điện thoại:</label>
+	                                        <input type="text" class="form-control" id="phoneNumber" th:value="${user.phoneNumber}" required>
+	                                    </div>
+	                                    <div class="col">
+	                                        <label for="cvv">Email liên hệ</label>
+	                                        <input type="text" class="form-control" id="email" th:value="${user.email}" required>
+	                                    </div>
+	                                </div>
+	                            </div>
+	                        </div>
+	                    
+		                    <div class="col-md-5">
+		                        <div class="right border p-3">
+		                            <div class="header text-center" >Tóm tắt đơn hàng</div>
+		                            <div class="row">Số lượng sản phẩm :  <b th:text="${length}"></b></div>
+		                            <div class="row item" th:each="item : ${selectedItems}" style="margin-top: 10px; margin-bottom: 10px;">
+		                            	<input type="hidden" name="productIds" th:value="${item.product.id}" />
+										<input type="hidden" name="quantities" th:value="${item.quantity}" />
+									    <div class="col-4 align-self-center">
+									        <img class="img-fluid" th:src="@{'/getproductimage/products/' + ${item.product.mainImage}}">
+									    </div>
+									    <div class="col-8">
+									        <div class="row"><b th:text="${item.product.price + ' đ'}"></b></div>
+									        <div class="row text-muted" th:text="${item.product.name}"></div>
+									        <div class="row" th:text="'Số lượng: ' + ${item.quantity}"></div>
+									    </div>
+									</div>
+		                           
+		                            <hr>
+		                            <div class="row lower">
+		                                <div class="col text-left">Tổng cộng</div>
+		                                <div class="col text-right" th:text="${subtotal + ' đ'}"> </div> 
+		                            </div>
+		                            <div class="row lower">
+		                                <div class="col text-left" >Phí vận chuyển</div>
+		                                <div class="col text-right">Miễn phí</div>
+		                            </div>
+		                            <div class="row lower">
+		                                <div class="col text-left"><b>Tổng thanh toán</b></div>
+		                                <div class="col text-right"><b th:text="${subtotal + ' đ'}"></b></div>
+		                                <input type="hidden" name="subtotal" th:value="${subtotal}" />
+		                            </div>
+            				
+		                            <button type="submit" class="btn btn-primary btn-block mt-3">Đặt Hàng</button>
+		                        </div>
+		                    </div>
+		                </form>
+            		</div>
+        		</div>
+        	</div>
+        </div>
+    </section>
+    
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+</body>
+</html>

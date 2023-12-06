@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet"
+          href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+          crossorigin="anonymous">
+    <title>Line Graph</title>
+    <!-- Optional theme -->
+    <link rel="stylesheet"
+          href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" />
+</head>
+<body>
+<nav class="navbar navbar-dark bg-dark navbar-expand-sm">
+    <a class="navbar-brand  " href="#"><strong> Spring Mvc Charts</strong> </a>
+</nav>
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/highcharts-3d.js"></script>
+<script src="https://code.highcharts.com/modules/exporting.js"></script>
+<div id="container" style="height: 400px"></div>
+<script th:inline="javascript">
+		Highcharts.chart('container',{
+		   chart: {
+		      type: 'line',
+		      width: 500
+		   },
+		   title: {
+		      text: 'Line chart'
+		   },
+		   xAxix: {
+		      categories: ["C","Python","Java","C#"]
+		   },
+		   tooltip: {
+		     formatter: function(){
+		        console.log(this);
+		     }
+		   },
+		   series: [{
+		     data: [40,80,50,40]
+		   }]
+		});
+
+
+</script>
+</div>
+<script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+		th:replace="~{AdminBase::Layout(~{::section})}">
+	<head>
+		
+	</head>
+	<body>
+		<section style="width: 100%;">
+			<div class="container-fluid py-4">
+		      <div class="row">
+		        <div class="col-12">
+		          <div class="card my-4">
+		            <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+		              <div class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3">
+		                <h6 class="text-white text-capitalize ps-3" style="font-size: 2rem;">CATEGORY</h6>
+		              </div>
+		            </div>
+					<div class="text-center card-body">
+		                <form action="/admin/category/add" method="post" enctype="multipart/form-data" role="form" class="text-start" style="width: 50%; text-align: center;margin: 0 auto;">
+							<div th:if="${errorMessage}" class="alert alert-danger">
+					            <p th:text="${errorMessage}" class="error-message text-center text-white font-weight-bold" id="error-message"></p>
+					        </div>
+		                  <div class="input-group input-group-outline mb-3">
+							    <label class="w-30 my-2" style="font-size: 1.2rem;">Chọn ảnh chính:</label>
+							    <input id="file-input" type="file" name="image">
+							    <img id="image-container" style="max-width: 100px; max-height: 100px; display: none;">
+							</div>
+		                  <div class="input-group input-group-outline mb-3" >
+		                    <label class="w-30 my-2" style="font-size: 1.2rem;">Tên Thể Loại :</label>
+		                    <input type="text" name="name" class="form-control" placeholder="nhập tên thể loại">
+		                  </div>
+		                  <div class="input-group input-group-outline mb-3">
+		                    <label class="w-30 my-2" style="font-size: 1.2rem;">Biệt Danh :</label>
+		                    <input type="text" name="alias" class="form-control" placeholder="nhập biệt danh thể loại">
+		                  </div>
+		                  <div class="text-center">
+							<a class="btn bg-gradient-primary" href="/admin/category">Trở về danh sách</a>
+		                    <button type="submit" class="btn bg-gradient-primary">Thêm</button>
+		                  </div>
+		                </form>
+		            </div>
+		          </div>
+		        </div>
+		      </div>
+		    </div>		
+		</section>	
+	</body>
+</html>

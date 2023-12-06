@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+		th:replace="~{AdminBase::Layout(~{::section})}">
+<head>
+</head>
+<body>
+    <section class="container mt-5 d-flex" style="width: 100%;">
+		<div style="width: 50%;">
+        <form th:action="@{/admin/profit}" method="post">
+            <label for="year">Chọn năm xem doanh thu:</label>
+            <select id="year" name="year" style="width: 100px;">
+                <option th:each="year : ${years}" th:value="${year}" th:text="${year}" th:selected="${year == selectedYear}"></option>
+            </select>
+            <button type="submit">Xem doanh thu</button>
+        </form>
+        <canvas id="myChart" width="400" height="200"></canvas>
+       </div>
+    </section>
+
+</body>
+</html>

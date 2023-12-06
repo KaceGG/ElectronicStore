@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+		th:replace="~{base::Layout(~{::section})}">
+	<head>
+	</head>
+	<body>
+		<section>
+    
+
+    
+    
+    <div class="single-product-area">
+        <div class="zigzag-bottom"></div>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="single-sidebar">
+                        <h2 class="sidebar-title">Search Products</h2>
+                        <form action="">
+                            <input type="text" placeholder="Search products...">
+                            <input type="submit" value="Search">
+                        </form>
+                    </div>
+                    
+                    <div class="single-sidebar">
+                        <h2 class="sidebar-title">Products</h2>
+                        <div class="thubmnail-recent">
+                            <img src="img/product-thumb-1.jpg" class="recent-thumb" alt="">
+                            <h2><a href="">Sony Smart TV - 2015</a></h2>
+                            <div class="product-sidebar-price">
+                                <ins>$700.00</ins> <del>$100.00</del>
+                            </div>                             
+                        </div>
+                        <div class="thubmnail-recent">
+                            <img src="img/product-thumb-1.jpg" class="recent-thumb" alt="">
+                            <h2><a href="">Sony Smart TV - 2015</a></h2>
+                            <div class="product-sidebar-price">
+                                <ins>$700.00</ins> <del>$100.00</del>
+                            </div>                             
+                        </div>
+                        <div class="thubmnail-recent">
+                            <img src="img/product-thumb-1.jpg" class="recent-thumb" alt="">
+                            <h2><a href="">Sony Smart TV - 2015</a></h2>
+                            <div class="product-sidebar-price">
+                                <ins>$700.00</ins> <del>$100.00</del>
+                            </div>                             
+                        </div>
+                        <div class="thubmnail-recent">
+                            <img src="img/product-thumb-1.jpg" class="recent-thumb" alt="">
+                            <h2><a href="">Sony Smart TV - 2015</a></h2>
+                            <div class="product-sidebar-price">
+                                <ins>$700.00</ins> <del>$100.00</del>
+                            </div>                             
+                        </div>
+                    </div>
+                    
+                    <div class="single-sidebar">
+                        <h2 class="sidebar-title">Recent Posts</h2>
+                        <ul>
+                            <li><a href="">Sony Smart TV - 2015</a></li>
+                            <li><a href="">Sony Smart TV - 2015</a></li>
+                            <li><a href="">Sony Smart TV - 2015</a></li>
+                            <li><a href="">Sony Smart TV - 2015</a></li>
+                            <li><a href="">Sony Smart TV - 2015</a></li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="col-md-8">
+                    <div class="product-content-right">
+                        <div class="product-breadcroumb">
+                            <a href="/">Home</a>
+                            <a href="#" th:text="${product.category.name}"></a>
+                            <a href="#" th:text="${product.name}"></a>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="product-images">
+                                    <div class="product-main-img">
+                                        <img th:src="@{'/assets/img/products/' + ${product.mainImage}}" alt="" class="clickable-image">
+                                    </div>
+                                    
+                                    <div class="product-gallery">
+                                        <img th:each="productImage : ${productImages}" th:src="@{'/assets/img/products/' + ${productImage.name}}" alt="" class="clickable-image">
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="col-sm-6">
+                                <div class="product-inner">
+                                    <h2 class="product-name" th:text="${product.name}"></h2>
+                                    <div class="product-inner-price">
+                                        <ins th:text="${product.price}"></ins>đ
+                                    </div>    
+                                    
+                                    <form th:action="@{/user/cart}" method="post">
+                                        <input type="hidden" name="productId" th:value="${product.id}" />
+                                        <input type="hidden" name="quantity" th:value="1" />
+                                        <button type="submit" class="add_to_cart_button">Add to Cart</button>
+                                    </form>  
+                                    
+                                    <div class="product-inner-category" style="margin-top: 20px;">
+                                        <p>Danh mục: <a href="#" th:text="${product.category.name}"></a>. Thương hiệu: <a href="#" th:text="${product.brand.name}"></a></p>
+                                    </div> 
+                                    
+                                    <div role="tabpanel">
+                                        <ul class="product-tab" role="tablist">
+                                            <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">Description</a></li>
+                                        </ul>
+                                        <div class="tab-content">
+                                            <div role="tabpanel" class="tab-pane fade in active" id="home">
+                                                <h2>Product Description</h2>  
+                                                <h3 th:text="${product.shortDescription}"></h3>
+
+                                                <p th:text="${product.fullDescription}"></p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="related-products-wrapper">
+                            <h2 class="related-products-title">Reviews</h2>
+                            <div class="submit-review">
+					        <!-- Existing reviews will be displayed here -->
+					        <div th:each="review : ${reviews}" class="review" style="margin-top: 40px;">
+								<p style="margin-right: 20px;margin-bottom: 0;" th:text="${review.customer.lastName}"></p>
+							    <div class="rating" >
+							        <span th:each="i : ${#numbers.sequence(1, review.rating)}" style="color: #ffce3d;	">&#9733;</span>
+							        
+							    </div>
+							    
+							    <span class="timestamp" th:text="${#dates.format(review.reviewTime, 'yyyy-MM-dd HH:mm:ss')}" ></span>
+							    <p class="comment" style="margin-top: 10px;" th:text="${review.comment}"></p>
+							    <a th:href="@{'/user/reviews/' + ${product.id} + '/like/' + ${review.id}}"
+								    th:style="${review.likedByUsers.contains(user)} ? 'text-decoration: none; color: red;' : 'text-decoration: none; color: inherit;'">
+								    <i class="like-icon" style="cursor: pointer;">❤</i>
+								    <span th:text="${review.likeCount}"></span>
+								</a>
+							</div>
+	
+							
+					        <form th:action="@{'/user/reviews/' + ${product.id}}" method="post" class="rating-chooser" style="margin-top: 60px;">
+					            <p>bạn hãy chọn số sao cho sản phẩm</p>
+					            <div class="rating-wrap-post" id="user-rating">
+					                <label th:each="star : ${#numbers.sequence(1, 5)}">
+									    <input type="radio" th:name="rating" th:value="${star}" />
+									    <span th:text="${'&#9733;'.repeat(star)}" style="color: #ffce3d;"></span>
+									</label>
+					            </div>
+					            
+					          	<p><label for="new-comment">Comment</label> <textarea name="comment" id="new-comment" cols="30" rows="5"></textarea></p>
+					        	<button type="submit">Bình luận</button>
+					        </form>                       
+                        </div>
+                    </div>                    
+                </div>
+            </div>
+        </div>
+    </div>
+		</section>
+		
+	</body>
+</html>  

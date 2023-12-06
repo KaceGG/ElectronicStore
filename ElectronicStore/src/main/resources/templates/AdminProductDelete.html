@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="~{AdminBase::Layout(~{::section})}">
+<head>
+	
+</head>
+<body>
+    <section style="width: 100%;">
+        <div class="container py-4">
+            <h2>Confirm Delete</h2>
+            <h4>Bạn có chắc chắn muốn xóa danh mục sau không?</h4>
+            
+            <div class="card mb-3">
+                <div class="row g-0">
+                    <div class="col-md-4" style="display: flex;flex-direction: column;">
+                        <img th:src="@{'/getproductimage/products/' + ${product.mainImage}}" class="img-fluid clickable-image" alt="product Image">
+                        <div class="secondary-images" style="display: flex;justify-content: center;flex-wrap: wrap;">
+							<img th:each="productImages : ${productImages}" th:src="@{'/getproductimage/products/' + ${productImages.name}}" style="width: 60px;margin: 20px 10px; " class="img-fluid clickable-image">
+						</div>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card-body">
+							<div class="input-group input-group-outline my-3" style="display: flex; align-items: center;">
+								<label class="w-30 my-2" style="font-size: 1.2rem;">TÊN DANH MỤC : </label>
+	                            <h5 class="card-title" th:text="${product.name}"></h5>
+                            </div>
+                            <div class="input-group input-group-outline my-3" style="display: flex; align-items: center;">
+	                            <label class="w-30 my-2" style="font-size: 1.2rem;">BIỆT DANH: </label>
+	                            <h5 class="card-text" th:text="${product.alias}"></h5>
+                            </div>
+                            <div class="input-group input-group-outline my-3" style="display: flex; align-items: center;">
+	                            <label class="w-30 my-2" style="font-size: 1.2rem;">Giới thiệu ngắn: </label>
+	                            <h5 class="card-text" th:text="${product.shortDescription}"></h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <form method="post" th:action="@{'/admin/product/delete/' + ${product.id}}">
+                <button type="submit" class="btn btn-danger">Delete</button>
+                <a href="/admin/product" class="btn btn-primary">Cancel</a>
+            </form>
+        </div>
+    </section>
+</body>
+</html>

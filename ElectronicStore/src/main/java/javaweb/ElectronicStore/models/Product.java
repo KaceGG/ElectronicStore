@@ -5,6 +5,9 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
 import javaweb.ElectronicStore.models.order.OrderDetail;
 
 import jakarta.persistence.CascadeType;
@@ -25,7 +28,7 @@ import jakarta.persistence.Transient;
 public class Product {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer id;
+	private Long id;
 
 	@Column(unique = true, length = 256, nullable = false)
 	private String name;
@@ -39,9 +42,10 @@ public class Product {
 	@Column(length = 4096, nullable = false, name = "full_description")
 	private String fullDescription;
 
+	@CreationTimestamp
 	@Column(name = "created_time")
 	private Date createdTime;
-
+	@UpdateTimestamp
 	@Column(name = "updated_time")
 	private Date updatedTime;
 
@@ -85,18 +89,39 @@ public class Product {
 	@OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
 	private Set<ProductImage> images = new HashSet<>();
 
+	
+	public Product(long i, String name, String alias, String shortDescription, String fullDescription,
+			Date createdTime, Date updatedTime, boolean enabled, float cost, float price, float discountPercent,
+			String mainImage, Category category, Brand brand) {
+		super();
+		this.id = i;
+		this.name = name;
+		this.alias = alias;
+		this.shortDescription = shortDescription;
+		this.fullDescription = fullDescription;
+		this.createdTime = createdTime;
+		this.updatedTime = updatedTime;
+		this.enabled = enabled;
+		this.cost = cost;
+		this.price = price;
+		this.discountPercent = discountPercent;
+		this.mainImage = mainImage;
+		this.category = category;
+		this.brand = brand;
+	}
+
 	public Product() {
 	}
 
-	public Product(Integer id) {
+	public Product(Long id) {
 		this.id = id;
 	}
 
-	public Integer getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(Integer id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 

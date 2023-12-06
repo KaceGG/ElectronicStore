@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+		th:replace="~{AdminBase::Layout(~{::section})}">
+	<head>
+		<title>abc</title>
+	</head>
+	<body>
+		<section class="container mt-4" style="margin: 100px auto;">
+			 <div class="d-flex btn-group" role="group">
+			    <form th:action="@{/admin/order}" method="get">
+				    <button type="submit" name="status" value="all" th:class="${selectedStatus == 'all' ? 'btn btn-primary active' : 'btn btn-primary'}">Tất cả</button>
+				</form>
+			    <form th:action="@{/admin/order}" method="get">
+			        <button type="submit" name="status" value="PROCESSING" th:class="${selectedStatus == 'PROCESSING' ? 'btn btn-primary active' : 'btn btn-primary'}">Chưa duyệt</button>
+			    </form>
+			    <form th:action="@{/admin/order}" method="get">
+			        <button type="submit" name="status" value="SHIPPING" th:class="${selectedStatus == 'SHIPPING' ? 'btn btn-primary active' : 'btn btn-primary'}">Đã duyệt</button>
+			    </form>
+			    <form th:action="@{/admin/order}" method="get">
+			        <button type="submit" name="status" value="DELIVERED" th:class="${selectedStatus == 'DELIVERED' ? 'btn btn-primary active' : 'btn btn-primary'}">Hoàn thành</button>
+			    </form>
+			    <form th:action="@{/admin/order}" method="get">
+			        <button type="submit" name="status" value="CANCELLED" th:class="${selectedStatus == 'CANCELLED' ? 'btn btn-primary active' : 'btn btn-primary'}">Đã hủy</button>
+			    </form>
+			</div>
+		    <table class="table table-striped table-bordered">
+		        <thead class="thead-dark">
+		        <tr>
+		            <th scope="col">Order Time</th>
+		            <th scope="col">Total</th>
+		            <th scope="col">Payment Method</th>
+		            <th scope="col">Status</th>
+		            <th scope="col">Action</th>
+		        </tr>
+		        </thead>
+		        <tbody>
+		        <tr th:each="order : ${orders}">
+		            <td th:text="${order.orderTime}"></td>
+		            <td th:text="${order.total}"></td>
+		            <td th:text="${order.paymentMethod}"></td>
+		            <td th:class="${#strings.trim(order.status) == 'CANCELLED'} ? 'text-danger' : (${#strings.trim(order.status) == 'DELIVERED'} ? 'text-success' : '')">
+						<p th:if="${#strings.trim(order.status) == 'CANCELLED'}" class="text-danger">Đơn hàng đã được hủy</p>
+		                <p th:if="${#strings.trim(order.status) == 'SHIPPING'}" class="text-info">Đơn hàng đang được giao</p>
+		                <p th:if="${#strings.trim(order.status) == 'DELIVERED'}" class="text-success">Đã nhận</p>
+		                <p th:if="${#strings.trim(order.status) == 'PROCESSING'}" class="text-warning">Đơn hàng đang được chờ duyệt</p>
+					</td>
+		            <td>
+		                <div class="btn-group" role="group">
+		                    <button type="button" class="btn btn-outline-info">View Details</button>&nbsp;&nbsp;&nbsp;&nbsp;
+		                    <form th:action="@{'/admin/order/updateStatus/' + ${order.id}}" method="post">
+		                        <button th:if="${#strings.trim(order.status) == 'PROCESSING'}" type="submit" class="btn btn-outline-success">Duyệt đơn hàng</button>
+		                    </form>
+		                </div>
+		            </td>
+		        	</tr>
+		        </tbody>
+		    </table>
+		</section>
+		
+	</body>
+</html>

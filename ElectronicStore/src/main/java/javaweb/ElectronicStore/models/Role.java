@@ -22,9 +22,6 @@ public class Role {
 	@Column(length = 40, nullable = false, unique = true)
 	private String name;
 
-	@Column(length = 150, nullable = false)
-	private String description;
-
 	@ManyToMany(mappedBy = "roles")
 	private Set<User> users = new HashSet<>();
 
@@ -37,11 +34,6 @@ public class Role {
 
 	public Role(String name) {
 		this.name = name;
-	}
-
-	public Role(String name, String description) {
-		this.name = name;
-		this.description = description;
 	}
 
 	public Integer getId() {
@@ -58,14 +50,6 @@ public class Role {
 
 	public void setName(String name) {
 		this.name = name;
-	}
-
-	public String getDescription() {
-		return description;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
 	}
 
 	public Set<User> getUsers() {
